@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MoneySense KKU: แอปจำลองบริหารเงินนักศึกษา (CT Solution)</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f0f2f5;
+            color: #333;
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            max-width: 700px;
+            margin: 0 auto;
+            background-color: #ffffff;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            color: #007bff;
+            text-align: center;
+            font-size: 2.2em;
+            margin-bottom: 5px;
+        }
+        .subtitle {
+            text-align: center;
+            color: #6c757d;
+            margin-bottom: 25px;
+            font-style: italic;
+        }
+        h2 {
+            color: #17a2b8;
+            border-bottom: 2px solid #eee;
+            padding-bottom: 10px;
+            margin-top: 35px;
+            font-size: 1.5em;
+        }
+        .input-group {
+            margin-bottom: 20px;
+        }
+        .input-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+            color: #495057;
+        }
+        .input-group input {
+            width: calc(100% - 20px);
+            padding: 12px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            box-sizing: border-box;
+            font-size: 16px;
+        }
+        .result-box {
+            margin-top: 30px;
+            padding: 25px;
+            border-radius: 10px;
+            text-align: center;
+            font-size: 1.3em;
+            transition: background-color 0.4s ease-in-out;
+        }
+        #remaining-budget {
+            font-size: 2em;
+            font-weight: bold;
+            display: block;
+            margin-top: 5px;
+        }
+        #status-alert {
+            font-size: 1.6em;
+            margin-top: 15px;
+            font-weight: 900;
+        }
+        .status-safe { background-color: #d4edda; color: #155724; border: 3px solid #155724; }
+        .status-warning { background-color: #fff3cd; color: #856404; border: 3px solid #856404; }
+        .status-danger { background-color: #f8d7da; color: #721c24; border: 3px solid #721c24; }
+        .data-insight {
+            background-color: #e9f7fe;
+            padding: 18px;
+            border-radius: 10px;
+            margin-bottom: 25px;
+            text-align: center;
+            border-left: 5px solid #007bff;
+        }
+        button {
+            width: 100%;
+            padding: 15px;
+            background-color: #28a745;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.1em;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        button:hover {
+            background-color: #1e7e34;
+        }
+        .ct-description {
+            margin-top: 15px;
+            font-size: 0.9em;
+            color: #6c757d;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>MoneySense KKU</h1>
+    <p class="subtitle">แอปพลิเคชันจำลองเพื่อแก้ปัญหาการใช้จ่ายตามอารมณ์ของนักศึกษา ม.ขอนแก่น</p>
+
+    <div class="data-insight">
+        <strong>ST Insight (การคิดเชิงสถิติ):</strong> <br>
+        จากการวิเคราะห์ 225 ตัวอย่าง พบว่า **กว่า 52%** ของเงินไม่พอใช้เกิดจากการใช้จ่ายตามอารมณ์และกระแส
+    </div>
+
+    <h2>CT Solution: Algorithm ควบคุม Impulse Spending</h2>
+
+    <p class="ct-description">เครื่องมือนี้ใช้หลักการ **Abstraction** และ **Algorithm Design** ในการควบคุมพฤติกรรม. เราตั้งงบสูงสุดสำหรับหมวด 'ตามอารมณ์' เพื่อป้องกันจุดรั่วไหลหลัก</p>
+
+    <div class="input-group">
+        <label for="monthly-cap">1. ตั้งงบสูงสุดสำหรับการใช้จ่ายตามอารมณ์/กระแส (Impulse Cap) (บาท)</label>
+        <input type="number" id="monthly-cap" value="1000" placeholder="เช่น 1000">
+    </div>
+
+    <div class="input-group">
+        <label for="current-spent">2. บันทึกยอดที่ใช้จ่ายตามอารมณ์ไปแล้ว (บาท)</label>
+        <input type="number" id="current-spent" value="0" placeholder="เช่น 350">
+    </div>
+
+    <button onclick="calculateBudget()">
+        คำนวณและตรวจสอบสถานะงบประมาณ (Run CT Algorithm)
+    </button>
+
+    <div id="result" class="result-box status-safe">
+        ยอดงบคงเหลือสำหรับ Impulse Spending: <span id="remaining-budget">1000</span> บาท
+        <div id="status-alert">สถานะ: ปลอดภัย</div>
+    </div>
+
+    <h2 style="margin-top: 40px;">หลักการทำงานของ Algorithm</h2>
+    <p class="ct-description">
+        Algorithm ถูกตั้งค่า Thresholds เพื่อแจ้งเตือนการหยุดใช้:<br>
+        - **ปลอดภัย:** เหลือมากกว่า 50% ของ Cap <br>
+        - **เฝ้าระวัง:** เหลือ 1% - 50% ของ Cap (ต้องหยุดชะลอ) <br>
+        - **อันตราย:** ใช้เกิน Cap ที่ตั้งไว้
+    </p>
+</div>
+
+<script>
+    function calculateBudget() {
+        // 1. Get Input Values (CT: Decomposition)
+        const cap = parseFloat(document.getElementById('monthly-cap').value) || 0;
+        const spent = parseFloat(document.getElementById('current-spent').value) || 0;
+
+        // 2. Calculation (CT: Algorithm Design)
+        const remaining = cap - spent;
+
+        // 3. Update UI and Set Status Alert (CT: Feedback Loop)
+        const resultBox = document.getElementById('result');
+        const remainingBudgetSpan = document.getElementById('remaining-budget');
+        const statusAlert = document.getElementById('status-alert');
+
+        remainingBudgetSpan.textContent = remaining.toFixed(2);
+        
+        // Remove existing classes
+        resultBox.classList.remove('status-safe', 'status-warning', 'status-danger');
+
+        // Logic for Alert (ST: Setting Thresholds based on analysis)
+        if (remaining > (cap * 0.5)) {
+            // เหลือมากกว่า 50%
+            resultBox.classList.add('status-safe');
+            statusAlert.textContent = 'สถานะ: ปลอดภัย - วินัยเยี่ยม!';
+        } else if (remaining >= 0 && remaining <= (cap * 0.5)) {
+            // เหลือระหว่าง 0% - 50%
+            resultBox.classList.add('status-warning');
+            statusAlert.textContent = 'สถานะ: เฝ้าระวัง - ใช้ใกล้หมดแล้ว';
+        } 
+        else {
+            // ใช้เกิน (remaining < 0)
+            resultBox.classList.add('status-danger');
+            statusAlert.textContent = `สถานะ: อันตราย! ใช้เกินงบมาแล้ว ${Math.abs(remaining).toFixed(2)} บาท`;
+        }
+    }
+
+    // Run initial calculation when page loads
+    calculateBudget(); 
+</script>
+
+</body>
+</html>
